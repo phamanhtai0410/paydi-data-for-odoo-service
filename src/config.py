@@ -17,7 +17,7 @@ load_dotenv()
 
 
 class BaseConfig(object):
-    PROJECT = "service"
+    PROJECT = "data-odoo"
 
     PROJECT_ROOT = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 

@@ -8,8 +8,8 @@ version: '3'
 services: 
   backend:
     # Name the service container
-    image: service
-    container_name: service
+    image: db-for-odoo-service
+    container_name: db-for-odoo-service
     build: ./
     restart: on-failure
 
@@ -27,21 +27,21 @@ services:
     extra_hosts:
       - "dev2-tiktik-com.cloud.local:203.205.21.196"
       
-  workers:
-    # Name the service container
-    image: worker-name-service
-    container_name: worker-name-service
-    build: ./
-    restart: on-failure
-    volumes:
-      - ./:/webapps/service
-      - /var/log/apps/:/var/log/apps/
-    networks:
-      - same-network
+  # workers:
+  #   # Name the service container
+  #   image: db-for-odoo-worker-service
+  #   container_name: db-for-odoo-worker-service
+  #   build: ./
+  #   restart: on-failure
+  #   volumes:
+  #     - ./:/webapps/service
+  #     - /var/log/apps/:/var/log/apps/
+  #   networks:
+  #     - same-network
 
-    command: supervisord -n -c /etc/supervisor.d/worker-supervisord.conf
-    extra_hosts:
-      - "dev2-tiktik-com.cloud.local:203.205.21.196"
+  #   command: supervisord -n -c /etc/supervisor.d/worker-supervisord.conf
+  #   extra_hosts:
+  #     - "dev2-tiktik-com.cloud.local:203.205.21.196"
 networks:
   same-network:
     external: true
