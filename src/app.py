@@ -77,13 +77,11 @@ def configure_app(app, config=None):
 def configure_extensions(app):
     # flask-sqlalchemy
     # db.init_app(app)
-    Logger.debug('Connect with Mysql successfully')
+    # Logger.debug('Connect with Mysql successfully')
 
-    # connect(DefaultConfig.MONGODB_URI, connect=False)
-    Logger.error('Connect with MongoDB successfully')
-    Logger.error({
-        'testing': 1
-    })
+    connect(DefaultConfig.MONGODB_URI, connect=False)
+    Logger.debug('Connect with MongoDB successfully')
+   
     # Redis
     # redis_cache.init_app(app)
     Logger.debug('Init Redis cache successfully')

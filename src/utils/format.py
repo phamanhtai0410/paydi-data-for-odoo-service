@@ -20,6 +20,8 @@ from bson import ObjectId
 def is_oid(oid):
     return ObjectId.is_valid(oid)
 
+def is_report_type(string: str):
+    return string in Constants.REPORT_TYPE
 
 def load_json(string: str):
     try:
