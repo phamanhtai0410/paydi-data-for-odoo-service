@@ -18,7 +18,7 @@ services:
       - /var/log/apps/:/var/log/apps/
 
     ports:
-      - "5011:5005"
+      - "5022:5005"
 
     networks:
      - same-network
