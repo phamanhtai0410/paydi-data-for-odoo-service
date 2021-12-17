@@ -1,0 +1,47 @@
+
+
+# File: docker-compose.yml
+# Created at 03/11/2021
+
+version: '3'
+
+services: 
+  backend:
+    # Name the service container
+    image: service
+    container_name: service
+    build: ./
+    restart: on-failure
+
+    volumes:
+      - ./:/webapps/service
+      - /var/log/apps/:/var/log/apps/
+
+    ports:
+      - "5011:5005"
+
+    networks:
+     - same-network
+
+    command: supervisord -n -c /etc/supervisor.d/supervisord.conf
+    extra_hosts:
+      - "dev2-tiktik-com.cloud.local:203.205.21.196"
+      
+  workers:
+    # Name the service container
+    image: worker-name-service
+    container_name: worker-name-service
+    build: ./
+    restart: on-failure
+    volumes:
+      - ./:/webapps/service
+      - /var/log/apps/:/var/log/apps/
+    networks:
+      - same-network
+
+    command: supervisord -n -c /etc/supervisor.d/worker-supervisord.conf
+    extra_hosts:
+      - "dev2-tiktik-com.cloud.local:203.205.21.196"
+networks:
+  same-network:
+    external: true
