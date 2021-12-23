@@ -16,9 +16,11 @@ from src.utils.logger import LoggerTask
 
 class TransactionService(object):
     @staticmethod
-    def get_list_transactions(limit: int, offset: int) -> list:
+    def get_list_transactions(limit: int, offset: int, search: str) -> list:
         transactions = TransactionModel.get_by_filter(
-            filter={},
+            filter={
+                
+            },
             options={
                 'limit': limit,
                 'offset': offset,
