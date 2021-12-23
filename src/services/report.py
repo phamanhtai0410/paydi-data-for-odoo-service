@@ -23,7 +23,7 @@ class ReportService(object):
                 'limit': limit,
                 'offset': offset,
                 'sort': {
-                    'created_time': pymongo.ASCENDING
+                    'created_time': -1
                 }
             }
         )
