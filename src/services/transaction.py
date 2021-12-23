@@ -21,7 +21,10 @@ class TransactionService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = TransactionModel.current().count()
@@ -34,7 +37,10 @@ class TransactionService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = ErrorTransactionModel.current().count()
@@ -46,7 +52,10 @@ class TransactionService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = CardTransactionModel.current().count()
@@ -58,7 +67,10 @@ class TransactionService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = PreAuthTransactionModel.current().count()
