@@ -9,6 +9,7 @@
         -
 """
 from logging import Logger
+import pymongo
 from src.models.report import Report
 from src.models.report import Report
 from src.utils.logger import LoggerTask
@@ -20,7 +21,10 @@ class ReportService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': pymongo.DESCENDING
+                }
             }
         )
         total = Report.current().count()
