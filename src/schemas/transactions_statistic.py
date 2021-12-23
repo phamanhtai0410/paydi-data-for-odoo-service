@@ -133,7 +133,7 @@ class CardTransactionResponse(Schema, BaseResponse):
     req_transaction_amount = fields.Float(allow_none=True, default='')
     req_tip_amount = fields.Float(allow_none=True, default='')
     req_currency_name = fields.String(allow_none=True, default='')
-    req_card_type = fields.Integer(allow_none=True, default='')
+    req_card_type = Convert(inner=fields.Integer(), convert_to=int, missing=0, allow_none=True)
 
     """
         - Response from PAX
