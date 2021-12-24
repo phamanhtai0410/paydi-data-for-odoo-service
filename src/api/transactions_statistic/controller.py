@@ -28,8 +28,9 @@ from src.exceptions.missing import ExceptionMissing
 def get_list_transactions():
     limit = request.args.get('limit', 10, type=int)
     offset = request.args.get('offset', 0, type=int)
+    search = request.args.get('search', '', type=str)
     
-    transactions, total = TransactionService.get_list_transactions(limit, offset)
+    transactions, total = TransactionService.get_list_transactions(limit, offset, search)
     Logger.debug(f'List transactions <1> = {transactions}')
     if not isinstance(transactions, list):
         transactions = []

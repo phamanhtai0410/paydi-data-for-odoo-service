@@ -16,12 +16,17 @@ from src.utils.logger import LoggerTask
 
 class TransactionService(object):
     @staticmethod
-    def get_list_transactions(limit: int, offset: int) -> list:
+    def get_list_transactions(limit: int, offset: int, search: str) -> list:
         transactions = TransactionModel.get_by_filter(
-            filter={},
+            filter={
+                
+            },
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = TransactionModel.current().count()
@@ -34,7 +39,10 @@ class TransactionService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = ErrorTransactionModel.current().count()
@@ -46,7 +54,10 @@ class TransactionService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = CardTransactionModel.current().count()
@@ -58,7 +69,10 @@ class TransactionService(object):
             filter={},
             options={
                 'limit': limit,
-                'offset': offset
+                'offset': offset,
+                'sort': {
+                    'created_time': -1
+                }
             }
         )
         total = PreAuthTransactionModel.current().count()
