@@ -86,7 +86,7 @@ class ErrorTransactionResponse(Schema, BaseResponse):
     req_transaction_amount = Convert(inner=fields.Float(), convert_to=float, missing=0, allow_none=True)
     req_tip_amount = Convert(inner=fields.Float(), convert_to=float, missing=0, allow_none=True)
     req_currency_name = fields.String(allow_none=True, default='')
-    req_card_type = Convert(inner=fields.Float(), convert_to=float, missing=0, allow_none=True)
+    # req_card_type = Convert(inner=fields.Float(), convert_to=float, missing=0, allow_none=True)
     # More
     card_holder = fields.String(allow_none=True, default='')
     card_number = fields.String(allow_none=True, default='')
@@ -133,7 +133,7 @@ class CardTransactionResponse(Schema, BaseResponse):
     req_transaction_amount = Convert(inner=fields.Float(), convert_to=float, missing=0, allow_none=True)
     req_tip_amount = Convert(inner=fields.Float(), convert_to=float, missing=0, allow_none=True)
     req_currency_name = fields.String(allow_none=True, default='')
-    req_card_type = Convert(inner=fields.Integer(), convert_to=int, missing=0, allow_none=True)
+    # req_card_type = Convert(inner=fields.Integer(), convert_to=int, missing=0, allow_none=True)
 
     """
         - Response from PAX
@@ -216,7 +216,7 @@ class PreAuthTransactionResponse(Schema, BaseResponse):
     req_transaction_amount = fields.Float(allow_none=True, default='')
     req_tip_amount = fields.Float(allow_none=True, default='')
     req_currency_name = fields.String(allow_none=True, default='')
-    req_card_type = Convert(inner=fields.Integer(), convert_to=int, missing=0, allow_none=True)
+    # req_card_type = Convert(inner=fields.Integer(), convert_to=int, missing=0, allow_none=True)
 
     """
         - Response from PAX
