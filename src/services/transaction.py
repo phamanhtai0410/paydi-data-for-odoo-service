@@ -29,8 +29,10 @@ class TransactionService(object):
                 }
             }
         )
-        total = TransactionModel.current().count()
-        return transactions, total
+        if len(transactions) < limit:
+            return transactions, offset + len(transactions)
+        else:
+            return transactions, offset + limit + limit // 2
     
 
     @staticmethod
@@ -45,8 +47,10 @@ class TransactionService(object):
                 }
             }
         )
-        total = ErrorTransactionModel.current().count()
-        return transactions, total
+        if len(transactions) < limit:
+            return transactions, offset + len(transactions)
+        else:
+            return transactions, offset + limit + limit // 2
 
     @staticmethod
     def get_list_card_transactions(limit: int, offset: int) -> list:
@@ -60,8 +64,10 @@ class TransactionService(object):
                 }
             }
         )
-        total = CardTransactionModel.current().count()
-        return transactions, total
+        if len(transactions) < limit:
+            return transactions, offset + len(transactions)
+        else:
+            return transactions, offset + limit + limit // 2
 
     @staticmethod
     def get_list_pre_auth_transactions(limit: int, offset: int) -> list:
@@ -75,6 +81,8 @@ class TransactionService(object):
                 }
             }
         )
-        total = PreAuthTransactionModel.current().count()
-        return transactions, total
+        if len(transactions) < limit:
+            return transactions, offset + len(transactions)
+        else:
+            return transactions, offset + limit + limit // 2
 
