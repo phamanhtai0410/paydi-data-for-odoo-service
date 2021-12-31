@@ -28,10 +28,13 @@ from src.exceptions.missing import ExceptionMissing
 def get_list_transactions():
     limit = request.args.get('limit', 10, type=int)
     offset = request.args.get('offset', 0, type=int)
-    search = request.args.get('search', '', type=str)
+    search_type = request.args.get('search_type', '', type=str)
+    search_status = request.args.get('search_status', '', type=str)
     
-    transactions, total = TransactionService.get_list_transactions(limit, offset, search)
+    transactions, total = TransactionService.get_list_transactions(limit, offset, search_type, search_status)
+    
     Logger.debug(f'List transactions <1> = {transactions}')
+    
     if not isinstance(transactions, list):
         transactions = []
 
@@ -45,8 +48,11 @@ def get_list_transactions():
 def get_list_error_transactions():
     limit = request.args.get('limit', 10, type=int)
     offset = request.args.get('offset', 0, type=int)
-
-    transactions, total = TransactionService.get_list_error_transactions(limit, offset)
+    search_app_ver = request.args.get('search_app_ver', '', type=str)
+    search_code = request.args.get('search_code', '', type=str)
+    search_description = request.args.get('search_description', '', type=str)
+    
+    transactions, total = TransactionService.get_list_error_transactions(limit, offset, search_app_ver, search_code, search_description)
     Logger.debug(f'List transactions <2> = {transactions}')
     if not isinstance(transactions, list):
         transactions = []
@@ -61,8 +67,21 @@ def get_list_error_transactions():
 def get_list_card_transactions():
     limit = request.args.get('limit', 10, type=int)
     offset = request.args.get('offset', 0, type=int)
-
-    transactions, total = TransactionService.get_list_card_transactions(limit, offset)
+    search_batch_no = request.args.get('search_batch_no', '', type=str)
+    search_app_ver = request.args.get('search_app_ver', '', type=str)
+    search_code = request.args.get('search_code', '', type=str)
+    search_description = request.args.get('search_description', '', type=str)
+    search_tranx_type = request.args.get('search_tranx_type', '', type=str)
+    
+    transactions, total = TransactionService.get_list_card_transactions(
+        limit, 
+        offset,
+        search_batch_no,
+        search_app_ver,
+        search_code,
+        search_description,
+        search_tranx_type
+    )
 
     if not isinstance(transactions, list):
         transactions = []
@@ -77,8 +96,10 @@ def get_list_card_transactions():
 def get_list_pre_auth_transactions():
     limit = request.args.get('limit', 10, type=int)
     offset = request.args.get('offset', 0, type=int)
-
-    transactions, total = TransactionService.get_list_pre_auth_transactions(limit, offset)
+    search_invoice_no = request.args.get('search_invoice', '', type=str)
+    search_has_voided = request.args.get('search_has_voided', '', type=bool)
+    
+    transactions, total = TransactionService.get_list_pre_auth_transactions(limit, offset, search_invoice_no)
 
     if not isinstance(transactions, list):
         transactions = []
