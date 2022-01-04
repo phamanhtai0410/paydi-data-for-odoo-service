@@ -15,7 +15,11 @@ from src.utils.logger import LoggerTask, Logger
 
 class TransactionService(object):
     @staticmethod
-    def get_list_transactions(limit: int, offset: int, search_type: str, search_status: str) -> list:
+    def get_list_transactions(limit: int,
+                              offset: int,
+                              search_type: str,
+                              search_status: str
+                              ) -> list:
         filter = {}
         if search_status:
             filter['status'] = search_status
@@ -42,7 +46,13 @@ class TransactionService(object):
     
 
     @staticmethod
-    def get_list_error_transactions(limit: int, offset: int, search_app_ver: str, search_code: str, search_description: str) -> list:
+    def get_list_error_transactions(limit: int,
+                                    offset: int,
+                                    search_app_ver: str,
+                                    search_code: str,
+                                    search_description: str,
+                                    search_bank_code: str,
+                                    ) -> list:
         filter = {}
         if search_app_ver:
             filter['app_ver'] = {
@@ -56,6 +66,11 @@ class TransactionService(object):
             filter['desc'] = {
                 '$regex': search_description
             }
+        if search_bank_code:
+            filter['bank_code'] = {
+                '$regex': search_bank_code
+            }
+            
         Logger.debug(f'Filter = {filter}')
         transactions = ErrorTransactionModel.get_by_filter(
             filter=filter,
@@ -79,7 +94,9 @@ class TransactionService(object):
                                    search_app_ver: str,
                                    search_code: str,
                                    search_description: str,
-                                   search_tranx_type: str) -> list:
+                                   search_tranx_type: str,
+                                   search_bank_code: str,
+                                   ) -> list:
         filter = {}
         if search_batch_no:
             filter['batch_no'] = {
@@ -100,7 +117,12 @@ class TransactionService(object):
         if search_tranx_type:
             filter['tranx_type'] = {
                 "$regex": search_tranx_type
-            } 
+            }
+        if search_bank_code:
+            filter['bank_code'] = {
+                '$regex': search_bank_code
+            }
+        
         Logger.debug(f'Filter = {filter}')
         transactions = CardTransactionModel.get_by_filter(
             filter=filter,
@@ -118,11 +140,19 @@ class TransactionService(object):
             return transactions, offset + limit + limit // 2
 
     @staticmethod
-    def get_list_pre_auth_transactions(limit: int, offset: int, search_invoice_no: str) -> list:
+    def get_list_pre_auth_transactions(limit: int,
+                                       offset: int,
+                                       search_invoice_no: str,
+                                       search_bank_code: str,
+                                       ) -> list:
         filter = {}
         if search_invoice_no:
             filter['invoice_no'] = {
                 "$regex": search_invoice_no
+            }
+        if search_bank_code:
+            filter['bank_code'] = {
+                '$regex': search_bank_code
             }
         
         transactions = PreAuthTransactionModel.get_by_filter(

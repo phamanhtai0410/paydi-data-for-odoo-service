@@ -68,6 +68,7 @@ class ErrorTransactionModel(BaseMG):
     req_tip_amount = fields.FloatField(blank=True, default='')
     req_currency_name = fields.CharField(blank=True, default='')
     req_card_type = fields.IntegerField(blank=True, default='')
+    bank_code = fields.CharField(default='', blank=True)
     # More
     card_holder = fields.CharField(blank=True, default='')
     card_number = fields.CharField(blank=True, default='')
@@ -160,7 +161,7 @@ class CardTransactionModel(BaseMG):
 
     section_no = fields.CharField(default='', blank=True)
     metadata = fields.DictField(blank=True, default={})
-
+    bank_code = fields.CharField(default='', blank=True)
 
 class PreAuthTransactionModel(BaseMG):
     class Meta:
@@ -240,3 +241,4 @@ class PreAuthTransactionModel(BaseMG):
 
     has_completed = fields.BooleanField(blank=True, default=False)
     complete_data = fields.DictField(blank=True, default={})
+    bank_code = fields.CharField(default='', blank=True)

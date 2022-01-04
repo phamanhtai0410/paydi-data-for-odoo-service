@@ -51,8 +51,9 @@ def get_list_error_transactions():
     search_app_ver = request.args.get('search_app_ver', '', type=str)
     search_code = request.args.get('search_code', '', type=str)
     search_description = request.args.get('search_description', '', type=str)
+    search_bank_code = request.args.get('search_bank_code', '', type=str)
     
-    transactions, total = TransactionService.get_list_error_transactions(limit, offset, search_app_ver, search_code, search_description)
+    transactions, total = TransactionService.get_list_error_transactions(limit, offset, search_app_ver, search_code, search_description, search_bank_code)
     Logger.debug(f'List transactions <2> = {transactions}')
     if not isinstance(transactions, list):
         transactions = []
@@ -72,6 +73,7 @@ def get_list_card_transactions():
     search_code = request.args.get('search_code', '', type=str)
     search_description = request.args.get('search_description', '', type=str)
     search_tranx_type = request.args.get('search_tranx_type', '', type=str)
+    search_bank_code = request.args.get('search_bank_code', '', type=str)
     
     transactions, total = TransactionService.get_list_card_transactions(
         limit, 
@@ -80,7 +82,8 @@ def get_list_card_transactions():
         search_app_ver,
         search_code,
         search_description,
-        search_tranx_type
+        search_tranx_type,
+        search_bank_code
     )
 
     if not isinstance(transactions, list):
@@ -98,8 +101,14 @@ def get_list_pre_auth_transactions():
     offset = request.args.get('offset', 0, type=int)
     search_invoice_no = request.args.get('search_invoice', '', type=str)
     search_has_voided = request.args.get('search_has_voided', '', type=bool)
+    search_bank_code = request.args.get('search_bank_code', '', type=str)
     
-    transactions, total = TransactionService.get_list_pre_auth_transactions(limit, offset, search_invoice_no)
+    transactions, total = TransactionService.get_list_pre_auth_transactions(
+        limit, 
+        offset, 
+        search_invoice_no,
+        search_bank_code
+    )
 
     if not isinstance(transactions, list):
         transactions = []
