@@ -18,14 +18,19 @@ class TransactionService(object):
     def get_list_transactions(limit: int,
                               offset: int,
                               search_type: str,
-                              search_status: str
+                              search_status: str,
+                              search_merchant: str
                               ) -> list:
         filter = {}
         if search_status:
             filter['status'] = search_status
         if search_type:
             filter['obj_type'] = search_type
-
+        if search_merchant:
+            filter['odoo_contact_id'] = {
+                "$regex": search_merchant    
+            }
+            
         Logger.debug(f'Filter = {filter}')
         
         transactions = TransactionModel.get_by_filter(
@@ -52,6 +57,7 @@ class TransactionService(object):
                                     search_code: str,
                                     search_description: str,
                                     search_bank_code: str,
+                                    search_merchant: str
                                     ) -> list:
         filter = {}
         if search_app_ver:
@@ -69,6 +75,10 @@ class TransactionService(object):
         if search_bank_code:
             filter['bank_code'] = {
                 '$regex': search_bank_code
+            }
+        if search_merchant:
+            filter['odoo_contact_id'] = {
+                "$regex": search_merchant    
             }
             
         Logger.debug(f'Filter = {filter}')
@@ -96,6 +106,7 @@ class TransactionService(object):
                                    search_description: str,
                                    search_tranx_type: str,
                                    search_bank_code: str,
+                                   search_merchant: str
                                    ) -> list:
         filter = {}
         if search_batch_no:
@@ -122,6 +133,10 @@ class TransactionService(object):
             filter['bank_code'] = {
                 '$regex': search_bank_code
             }
+        if search_merchant:
+            filter['odoo_contact_id'] = {
+                "$regex": search_merchant    
+            }
         
         Logger.debug(f'Filter = {filter}')
         transactions = CardTransactionModel.get_by_filter(
@@ -144,6 +159,7 @@ class TransactionService(object):
                                        offset: int,
                                        search_invoice_no: str,
                                        search_bank_code: str,
+                                       search_merchant: str
                                        ) -> list:
         filter = {}
         if search_invoice_no:
@@ -153,6 +169,10 @@ class TransactionService(object):
         if search_bank_code:
             filter['bank_code'] = {
                 '$regex': search_bank_code
+            }
+        if search_merchant:
+            filter['odoo_contact_id'] = {
+                "$regex": search_merchant    
             }
         
         transactions = PreAuthTransactionModel.get_by_filter(

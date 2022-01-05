@@ -12,6 +12,7 @@
 import os
 import json
 from dotenv import load_dotenv
+from paydi_lib.config import init
 
 load_dotenv()
 
@@ -58,3 +59,5 @@ class DefaultConfig(BaseConfig):
         - Config kafka
     """
     KAFKA_SERVER = json.loads(os.getenv('KAFKA_SERVER', default='[]'))
+
+init(DefaultConfig)
