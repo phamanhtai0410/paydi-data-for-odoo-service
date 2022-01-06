@@ -142,3 +142,10 @@ def get_list_pre_auth_transactions():
         'transactions': transactions,
         'total': total
     })
+    
+    
+@handle_response()
+@auth_service()
+def get_transactions_statistic():
+    _query = request.args.to_dict()
+    return TransactionService.get_transactions_statistic(query=_query)

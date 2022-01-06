@@ -8,8 +8,10 @@
         -
         -
 """
+import traceback
+from datetime import date, datetime
 from pymodm import fields
-
+from sentry_sdk import capture_exception
 from src.enums.transaction import TransactionStatusEnum
 from src.models.base import BaseMG
 
@@ -38,7 +40,43 @@ class TransactionModel(BaseMG):
     extract = fields.DictField(blank=True, default={})
     has_voided = fields.BooleanField(default=False, blank=True)
 
+    @classmethod
+    def count_with_filter(cls, filter={}):
+        try:
+            return cls.objects.find(filter).count()
+        except cls.DoesNotExist:
+            return {}
+        except:
+            capture_exception()
+            traceback.print_exc()
+            return {}
 
+    @classmethod
+    def sum_with_filter(cls, filter={}, sum_field_name=''):
+        try:
+            value = cls.objects.aggregate(
+                [
+                    {
+                        '$match': filter
+                    },
+                    {
+                        '$group': {
+                            '_id': None,
+                            'total': f'${sum_field_name}'
+                        }
+                    }
+                ]
+            )
+            return list(value)[0].get('total', 0)
+        except cls.DoesNotExist:
+            return {}
+        except:
+            capture_exception()
+            traceback.print_exc()
+            return {}
+            
+    
+    
 class ErrorTransactionModel(BaseMG):
     class Meta:
         collection_name = 'paydi_error_transactions'

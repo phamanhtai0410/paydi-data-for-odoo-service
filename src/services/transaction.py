@@ -12,7 +12,12 @@ from src.models.report import Report
 from src.models.transaction import TransactionModel, ErrorTransactionModel, CardTransactionModel, PreAuthTransactionModel
 from src.enums.transaction import TransactionStatusEnum, TransactionTopicKeyEnum
 from src.utils.logger import LoggerTask, Logger
-
+from paydi_lib.exceptions import MissingData
+from src.utils.datetime import get_current_time, convert_datetime_from_string, \
+    date_range, \
+    days_between
+from datetime import datetime
+from src.helpers.transaction import TransactionHelper
 class TransactionService(object):
     @staticmethod
     def get_list_transactions(limit: int,
@@ -41,7 +46,8 @@ class TransactionService(object):
                 'sort': {
                     'created_time': -1
                 }
-            }
+            },
+            with_cache=False
         )
         
         if len(transactions) < limit:
@@ -90,7 +96,8 @@ class TransactionService(object):
                 'sort': {
                     'created_time': -1
                 }
-            }
+            },
+            with_cache=False
         )
         if len(transactions) < limit:
             return transactions, offset + len(transactions)
@@ -147,7 +154,8 @@ class TransactionService(object):
                 'sort': {
                     'created_time': -1
                 }
-            }
+            },
+            with_cahe=False
         )
         if len(transactions) < limit:
             return transactions, offset + len(transactions)
@@ -183,10 +191,90 @@ class TransactionService(object):
                 'sort': {
                     'created_time': -1
                 }
-            }
+            },
+            with_cache=False
         )
         if len(transactions) < limit:
             return transactions, offset + len(transactions)
         else:
             return transactions, offset + limit + limit // 2
 
+    @staticmethod
+    def get_transactions_statistic(query: dict):
+        """Example:
+            query: {
+                'from_date': '05/01/2022',
+                'to_date': '05/02/2022'
+            }
+            
+        """
+        filter = {}
+        
+        to_date = datetime.utcnow()
+        # from_date = datetime.utcnow() - 3600 * 24
+        
+        if query and query.get('from_date'):
+
+            from_date = convert_datetime_from_string(query.get('from_date'), '%d/%m/%Y')
+            _days_number = days_between(from_date, to_date)
+
+            if _days_number > 50:
+                raise MissingData(message='Chỉ xem tối đa từ 50 ngày trước')
+
+            if query.get('to_date'):
+                to_date = convert_datetime_from_string(query.get('to_date'), '%d/%m/%Y') or datetime.utcnow()
+        filter['created_time'] = {
+            "$gt": from_date,
+            "$lt": to_date,
+        }
+        types = {
+            '1': 'VISA/JCB',
+            '2': 'NAPAS',
+            '3': 'MasterCard'
+        }
+        if query and query.get('search_merchant'):
+            filter['odoo_contact_id'] = query.get('search_merchant')
+        
+        _statistics_qr_code = {
+            'total_transation': TransactionModel.count_with_filter(
+                filter=TransactionHelper.get_filter_by_obj_type(filter, 'qr_code')
+            ),
+            'total_amount': TransactionModel.sum_with_filter(
+                filter=TransactionHelper.get_filter_by_obj_type(filter, 'qr_code'),
+                sum_field_name='total_amount'
+            )    
+        }
+        _statistics_card = {
+            'total_transactions': TransactionModel.count_with_filter(
+                filter=TransactionHelper.get_filter_by_obj_type(filter, 'card')
+            ),
+            'total_amount': TransactionModel.sum_with_filter(
+                filter=TransactionHelper.get_filter_by_obj_type(filter, 'card'),
+                sum_field_name='total_amount'
+            )
+        }
+        _statistics_card_types = [
+            {
+                'name': val,
+                'total_transactions': TransactionModel.count_with_filter(
+                    filter=TransactionHelper.get_filter_card_type(filter, _code)
+                ),
+                'total_amount': TransactionModel.sum_with_filter(
+                    filter=TransactionHelper.get_filter_card_type(filter, _code),
+                    sum_field_name='total_amount'
+                )
+            }
+            for _code, val in types.items()
+        ]
+        
+        return {
+            'card': {
+                'total_amount': _statistics_card.get('total_amount'),
+                'total_transactions': _statistics_card.get('total_transactions'),
+                'types': _statistics_card_types
+            },
+            'qr_code': _statistics_qr_code,
+            'total_amount': sum(
+                map(lambda x: x.get('total_amount')), [_statistics_card, _statistics_qr_code]
+            )
+        }
