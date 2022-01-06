@@ -155,7 +155,7 @@ class TransactionService(object):
                     'created_time': -1
                 }
             },
-            with_cahe=False
+            with_cache=False
         )
         if len(transactions) < limit:
             return transactions, offset + len(transactions)
