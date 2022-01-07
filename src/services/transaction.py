@@ -236,7 +236,7 @@ class TransactionService(object):
             filter['odoo_contact_id'] = query.get('search_merchant')
         
         _statistics_qr_code = {
-            'total_transation': TransactionModel.count_with_filter(
+            'total_transactions': TransactionModel.count_with_filter(
                 filter=TransactionHelper.get_filter_by_obj_type(filter, 'qr_code')
             ),
             'total_amount': TransactionModel.sum_with_filter(
@@ -278,5 +278,8 @@ class TransactionService(object):
             'qr_code': _statistics_qr_code,
             'total_amount': sum(
                 map(lambda x: x.get('total_amount'), [_statistics_card, _statistics_qr_code])
+            ),
+            'total_transactions': sum(
+                map(lambda x: x.get('total_transactions'), [_statistics_card, _statistics_qr_code])
             )
         }
