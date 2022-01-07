@@ -14,7 +14,7 @@ from pymodm import fields
 from sentry_sdk import capture_exception
 from src.enums.transaction import TransactionStatusEnum
 from src.models.base import BaseMG
-
+from src.utils.logger import Logger
 
 class TransactionModel(BaseMG):
     class Meta:
@@ -43,7 +43,7 @@ class TransactionModel(BaseMG):
     @classmethod
     def count_with_filter(cls, filter={}):
         try:
-            return cls.objects.find(filter).count()
+            return cls.objects.raw(filter).count()
         except cls.DoesNotExist:
             return {}
         except:
@@ -54,7 +54,8 @@ class TransactionModel(BaseMG):
     @classmethod
     def sum_with_filter(cls, filter={}, sum_field_name=''):
         try:
-            value = cls.objects.aggregate(
+            # Logger.debug(f'Summing filter = {filter}')
+            value = cls.current().aggregate(
                 [
                     {
                         '$match': filter
@@ -62,12 +63,14 @@ class TransactionModel(BaseMG):
                     {
                         '$group': {
                             '_id': None,
-                            'total': f'${sum_field_name}'
+                            'total': {
+                                "$sum": f'${sum_field_name}'
+                            }
                         }
                     }
                 ]
             )
-            return list(value)[0].get('total', 0)
+            return list(value)[0].get('total') or 0
         except cls.DoesNotExist:
             return {}
         except:

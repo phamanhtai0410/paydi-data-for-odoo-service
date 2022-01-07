@@ -244,6 +244,7 @@ class TransactionService(object):
                 sum_field_name='total_amount'
             )    
         }
+        Logger.debug(f'Statistic QR code = {_statistics_qr_code}')
         _statistics_card = {
             'total_transactions': TransactionModel.count_with_filter(
                 filter=TransactionHelper.get_filter_by_obj_type(filter, 'card')
@@ -253,6 +254,7 @@ class TransactionService(object):
                 sum_field_name='total_amount'
             )
         }
+        Logger.debug(f'Statistic card = {_statistics_card}')
         _statistics_card_types = [
             {
                 'name': val,
@@ -266,7 +268,7 @@ class TransactionService(object):
             }
             for _code, val in types.items()
         ]
-        
+        Logger.debug(f'Statistic card types = {_statistics_card_types}')
         return {
             'card': {
                 'total_amount': _statistics_card.get('total_amount'),
@@ -275,6 +277,6 @@ class TransactionService(object):
             },
             'qr_code': _statistics_qr_code,
             'total_amount': sum(
-                map(lambda x: x.get('total_amount')), [_statistics_card, _statistics_qr_code]
+                map(lambda x: x.get('total_amount'), [_statistics_card, _statistics_qr_code])
             )
         }

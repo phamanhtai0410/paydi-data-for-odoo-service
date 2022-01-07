@@ -126,6 +126,8 @@ def get_list_pre_auth_transactions():
     search_bank_code = request.args.get('search_bank_code', '', type=str)
     search_merchant = request.args.get('search_merchant', '', type=str)
     
+    _query = request.args.to_dict()
+    
     transactions, total = TransactionService.get_list_pre_auth_transactions(
         limit, 
         offset, 
@@ -148,4 +150,5 @@ def get_list_pre_auth_transactions():
 @auth_service()
 def get_transactions_statistic():
     _query = request.args.to_dict()
+    # Logger.debug(f'Tranx Statistic query = {_query}')
     return TransactionService.get_transactions_statistic(query=_query)

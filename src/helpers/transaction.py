@@ -15,3 +15,4 @@ class TransactionHelper(object):
     def get_filter_card_type(filter={}, card_type=''):
         filter['obj_type'] = 'card'
         filter['extract.card_type'] = card_type
+        return filter
