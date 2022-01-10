@@ -24,7 +24,8 @@ class TransactionService(object):
                               offset: int,
                               search_type: str,
                               search_status: str,
-                              search_merchant: str
+                              search_merchant: str,
+                              search_bank_code: str,
                               ) -> list:
         filter = {}
         if search_status:
@@ -34,6 +35,10 @@ class TransactionService(object):
         if search_merchant:
             filter['odoo_contact_id'] = {
                 "$regex": search_merchant    
+            }
+        if search_bank_code:
+            filter['extract.bank_code'] = {
+                "$regex": search_bank_code
             }
             
         Logger.debug(f'Filter = {filter}')

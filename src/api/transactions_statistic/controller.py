@@ -32,13 +32,15 @@ def get_list_transactions():
     search_type = request.args.get('search_type', '', type=str)
     search_status = request.args.get('search_status', '', type=str)
     search_merchant = request.args.get('search_merchant', '', type=str)
+    search_bank_code = request.args.get('search_bank_code', '', type=str)
     
     transactions, total = TransactionService.get_list_transactions(
         limit,
         offset,
         search_type,
         search_status,
-        search_merchant
+        search_merchant,
+        search_bank_code
     )
     
     Logger.debug(f'List transactions <1> = {transactions}')
