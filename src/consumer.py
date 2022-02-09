@@ -13,4 +13,4 @@ worker_config = {
 }
 
 
-app = Worker(worker_config, DefaultConfig).run()
+app = Worker(worker_config).run()
