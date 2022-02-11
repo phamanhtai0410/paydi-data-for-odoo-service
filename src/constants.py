@@ -35,3 +35,6 @@ class Constants(object):
     E_SERVER = 'E_SERVER'
     E_AUTH = 'E_AUTH'
     E_INVALID_PARAMS = 'E_INVALID_PARAMS'
+    
+    
+    REPORT_TYPE = ['app_error', 'app_feedback', 'app_rest', 'transaction']
