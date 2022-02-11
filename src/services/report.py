@@ -25,7 +25,8 @@ class ReportService(object):
                 'sort': {
                     'created_time': -1
                 }
-            }
+            },
+            with_cache=False
         )
         total = Report.current().count()
         LoggerTask.debug(f'Report Service get list for admin {reports}')

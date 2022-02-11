@@ -8,11 +8,13 @@
         -
         -
 """
+import traceback
+from datetime import date, datetime
 from pymodm import fields
-
+from sentry_sdk import capture_exception
 from src.enums.transaction import TransactionStatusEnum
 from src.models.base import BaseMG
-
+from src.utils.logger import Logger
 
 class TransactionModel(BaseMG):
     class Meta:
@@ -38,7 +40,46 @@ class TransactionModel(BaseMG):
     extract = fields.DictField(blank=True, default={})
     has_voided = fields.BooleanField(default=False, blank=True)
 
+    @classmethod
+    def count_with_filter(cls, filter={}):
+        try:
+            return cls.objects.raw(filter).count()
+        except cls.DoesNotExist:
+            return {}
+        except:
+            capture_exception()
+            traceback.print_exc()
+            return {}
 
+    @classmethod
+    def sum_with_filter(cls, filter={}, sum_field_name=''):
+        try:
+            # Logger.debug(f'Summing filter = {filter}')
+            value = cls.current().aggregate(
+                [
+                    {
+                        '$match': filter
+                    },
+                    {
+                        '$group': {
+                            '_id': None,
+                            'total': {
+                                "$sum": f'${sum_field_name}'
+                            }
+                        }
+                    }
+                ]
+            )
+            return list(value)[0].get('total') or 0
+        except cls.DoesNotExist:
+            return {}
+        except:
+            capture_exception()
+            traceback.print_exc()
+            return {}
+            
+    
+    
 class ErrorTransactionModel(BaseMG):
     class Meta:
         collection_name = 'paydi_error_transactions'
@@ -68,6 +109,7 @@ class ErrorTransactionModel(BaseMG):
     req_tip_amount = fields.FloatField(blank=True, default='')
     req_currency_name = fields.CharField(blank=True, default='')
     req_card_type = fields.IntegerField(blank=True, default='')
+    bank_code = fields.CharField(default='', blank=True)
     # More
     card_holder = fields.CharField(blank=True, default='')
     card_number = fields.CharField(blank=True, default='')
@@ -160,7 +202,7 @@ class CardTransactionModel(BaseMG):
 
     section_no = fields.CharField(default='', blank=True)
     metadata = fields.DictField(blank=True, default={})
-
+    bank_code = fields.CharField(default='', blank=True)
 
 class PreAuthTransactionModel(BaseMG):
     class Meta:
@@ -240,3 +282,4 @@ class PreAuthTransactionModel(BaseMG):
 
     has_completed = fields.BooleanField(blank=True, default=False)
     complete_data = fields.DictField(blank=True, default={})
+    bank_code = fields.CharField(default='', blank=True)

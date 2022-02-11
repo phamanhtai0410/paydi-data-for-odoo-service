@@ -22,8 +22,10 @@ from src.schemas.report import *
 from src.utils.logger import Logger, LoggerTask
 from src.services.report import ReportService
 from src.exceptions.missing import ExceptionMissing
+from paydi_lib.decorators import auth_service
 
 @handle_response()
+@auth_service()
 @load_data(GetListReport)
 def get_list_reports_for_admin():
     limit = request.args.get('limit', 10, type=int)

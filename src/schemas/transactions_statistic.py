@@ -47,9 +47,9 @@ class TransactionResponse(Schema, BaseResponse):
     obj_type = fields.String(required=True)
 
     total_amount = fields.Float(required=True)
-    error_msg = fields.String(allow_none=True)
+    error_msg = fields.String(allow_none=True, missing='')
     status = fields.String(allow_none=True)
-    extract = fields.Dict(allow_none=True)
+    extract = fields.Dict(allow_none=True, missing={})
     has_voided = fields.Boolean(allow_none=True, default=False)
 
 
@@ -100,6 +100,7 @@ class ErrorTransactionResponse(Schema, BaseResponse):
     # SALE | REVERSAL
     tranx_type = fields.String(allow_none=True, default='')
     trans_date_time = fields.String(allow_none=True, default='')
+    bank_code = fields.Str(missing='', allow_none=True)
 
 
 class GetListErrorTransactionsResponse(Schema, BaseResponse):
@@ -183,7 +184,7 @@ class CardTransactionResponse(Schema, BaseResponse):
 
     section_no = fields.String(default='', allow_none=True)
     metadata = fields.Dict(allow_none=True, default={})
-
+    bank_code = fields.Str(missing='', allow_none=True)
 
 class GetListCardTransactionsResponse(Schema, BaseResponse):
     class Meta:
@@ -267,6 +268,7 @@ class PreAuthTransactionResponse(Schema, BaseResponse):
 
     has_completed = fields.Boolean(allow_none=True, default=False)
     complete_data = fields.Dict(allow_none=True, default={})
+    bank_code = fields.Str(missing='', allow_none=True)
 
 
 
