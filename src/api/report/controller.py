@@ -31,7 +31,6 @@ def get_list_reports_for_admin():
     limit = request.args.get('limit', 10, type=int)
     offset = request.args.get('offset', 0, type=int)
     reports, total = ReportService.get_list_report_for_admin(limit, offset)
-    LoggerTask.debug(f'Reports list for admin ={reports}')
     if not isinstance(reports, list):
         reports = []
     LoggerTask.debug(f'Get list reports for admin {reports}')
