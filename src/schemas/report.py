@@ -52,7 +52,7 @@ class ReportResponse(Schema, BaseResponse):
     terminal_id = fields.String(allow_none=True)
     merchant_id = fields.String(allow_none=True)
     serial_number = fields.String()
-    account_id = fields.String()
+    account_id = fields.String(allow_none=True)
     pos_id = fields.String()
     message = fields.String()
     images = fields.List(fields.String())
