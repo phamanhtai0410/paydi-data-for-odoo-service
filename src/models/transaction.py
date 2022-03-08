@@ -13,7 +13,7 @@ from datetime import date, datetime
 from pymodm import fields
 from sentry_sdk import capture_exception
 from src.enums.transaction import TransactionStatusEnum
-from src.models.base import BaseMG
+from paydi_lib.model import BaseMG
 from src.utils.logger import Logger
 
 class TransactionModel(BaseMG):

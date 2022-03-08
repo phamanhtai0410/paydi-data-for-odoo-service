@@ -22,7 +22,7 @@ from sentry_sdk import capture_exception
 from src.decorators.cache import cache_id, cache_filter
 from src.utils.datetime import get_current_time
 from src.utils.validators import is_oid
-from src.models.base import BaseMG
+from paydi_lib.model import BaseMG
 
 SIZE = 10000
 

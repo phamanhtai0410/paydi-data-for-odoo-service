@@ -41,7 +41,7 @@ class TransactionResponse(Schema, BaseResponse):
     created_time = fields.Float(required=True)
 
     odoo_contact_id = fields.String(allow_none=True)
-    account_id = fields.String(required=True)
+    account_id = fields.String(allow_none=True)
     pos_id = fields.String(required=True)
 
     obj_type = fields.String(required=True)
@@ -70,7 +70,7 @@ class ErrorTransactionResponse(Schema, BaseResponse):
     created_time = fields.Float(required=True)
 
     odoo_contact_id = fields.String(allow_none=True)
-    account_id = fields.String(required=True)
+    account_id = fields.String(allow_none=True)
     pos_id = fields.String(required=True)
 
 
@@ -120,7 +120,7 @@ class CardTransactionResponse(Schema, BaseResponse):
     created_time = fields.Float(required=True)
 
     odoo_contact_id = fields.String(allow_none=True)
-    account_id = fields.String(required=True)
+    account_id = fields.String(allow_none=True)
     pos_id = fields.String(required=True)
 
     """

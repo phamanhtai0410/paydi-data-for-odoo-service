@@ -12,7 +12,8 @@
 from os import terminal_size
 from marshmallow import Schema, fields, ValidationError, INCLUDE, EXCLUDE, pre_load
 
-from src.schemas.base import BaseResponse, BaseQuery
+from paydi_lib.schema import BaseResponse
+from src.schemas.base import BaseQuery
 from src.utils.format import is_oid, id_response, is_report_type, is_report_type
 
 
@@ -52,7 +53,7 @@ class ReportResponse(Schema, BaseResponse):
     terminal_id = fields.String(allow_none=True)
     merchant_id = fields.String(allow_none=True)
     serial_number = fields.String()
-    account_id = fields.String()
+    account_id = fields.String(allow_none=True)
     pos_id = fields.String()
     message = fields.String()
     images = fields.List(fields.String())
